@@ -1,0 +1,9 @@
+file,label,subtype,session,fs,note
+S04_aux_rconly_c2442_fs40M_g64.sc16,aux,rconly,S04,40e6,gain 64 dB / RC only (drone off)
+S04_normal_near_c2442_fs40M_g64.sc16,normal,near,S04,40e6,gain 64 dB / drone on
+S04_normal_far_c2442_fs40M_g64.sc16,normal,far,S04,40e6,gain 64 dB / drone on / RC moved farther + 10 dB attenuator at RX2
+S04_background_background_c2442_fs40M_g64.sc16,background,background,S04,40e6,gain 64 dB / RC off (0 bursts)
+S04_jamming_barrage_lo_c2442_fs40M_g64.sc16,jamming,barrage_lo,S04,40e6,gain 64 dB / floor center 8.0 dB (background 3.1 dB)
+S04_jamming_barrage_hi_c2442_fs40M_g64.sc16,jamming,barrage_hi,S04,40e6,gain 64 dB / floor center 21.1 dB (background 3.1 dB)
+S04_jamming_cw_c2442_fs40M_g64.sc16,jamming,cw,S04,40e6,gain 64 dB / CW at 2445.0 MHz / tone amplitude about 28 LSB in the 5 s check
+S04_hijack_inject_c2442_fs40M_g64.sc16,hijack,inject,S04,40e6,gain 64 dB / injection held for the whole capture (QGC screen video 2026-11-16 19 17 54.mp4)

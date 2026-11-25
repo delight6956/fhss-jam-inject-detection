@@ -1,0 +1,9 @@
+file,label,subtype,session,fs,note
+S05_background_background_c2442_fs40M_g64.sc16,background,background,S05,40e6,gain 64 dB
+S05_normal_near_c2442_fs40M_g64.sc16,normal,near,S05,40e6,gain 64 dB
+S05_jamming_barrage_lo_c2442_fs40M_g64.sc16,jamming,barrage_lo,S05,40e6,gain 64 dB
+S05_jamming_barrage_hi_c2442_fs40M_g64.sc16,jamming,barrage_hi,S05,40e6,gain 64 dB
+S05_jamming_cw_c2442_fs40M_g64.sc16,jamming,cw,S05,40e6,gain 64 dB
+S05_hijack_inject_c2442_fs40M_g64.sc16,hijack,inject,S05,40e6,gain 64 dB
+S05_test_jam_c2442_fs40M_g64.sc16,test,jam,S05,40e6,gain 64 dB
+S05_normal_far_c2442_fs40M_g64.sc16,normal,far,S05,40e6,gain 64 dB
