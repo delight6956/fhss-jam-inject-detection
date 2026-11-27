@@ -1,0 +1,18 @@
+{
+ "phi0_rad": -1.612179140415528,
+ "tau_s": 8.850249999999997e-09,
+ "rho0_db": 2.8864390438538687,
+ "rho_slope_db_per_hz": -4.803503840532825e-07,
+ "n_bursts": 45,
+ "n_bursts_all": 45,
+ "resid_std_deg": 3.864629464004757,
+ "rho_resid_std_db": 0.43467411219587004,
+ "drift_max_deg": 4.878695128261813,
+ "f_min_hz": -3984375.0,
+ "f_max_hz": 5625000.0,
+ "fs": 20000000.0,
+ "has_delay_fit": true,
+ "file": "cal_rc.00.sc16",
+ "file2": "cal_rc.01.sc16",
+ "created": "2026-11-16 23:11:08"
+}
