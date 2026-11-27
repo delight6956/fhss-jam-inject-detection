@@ -74,7 +74,7 @@ python code/build_spatial.py --features data/b210_2ch_SP1-SP3/features_2ch.csv -
     --cal data/b210_2ch_SP1-SP3/cal_S07.json --enroll-sec 2 --out data/b210_2ch_SP1-SP3/features_2ch_sp_enroll2s.csv
 ```
 
-`evaluate_sets.py`의 `fused14`·`fused14n` 집합은 기준 등록 구간을 평가에서 빼지 않으므로, 공간 특징 평가에는 `eval_spatial.py`를 사용합니다.
+`evaluate_sets.py`에는 10차원에 공간 특징을 더한 `fused14`·`fused14n` 집합만 있습니다. 개선 시간 특징을 포함한 15차원 기준의 비교(19·23차원)와 클래스별 재현율은 `eval_spatial.py`로 계산합니다. 두 스크립트 모두 기준 등록 구간(enroll=1)을 평가에서 뺍니다.
 
 MLP(은닉 16, ReLU)와 시드 설정이 논문과 같으므로, scikit-learn 버전 차이에 따른 소수점 이하 차이 외에는 같은 값이 나옵니다(검증 환경: scikit-learn 1.9.1).
 
