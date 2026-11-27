@@ -1,0 +1,10 @@
+file,file_ch1,label,subtype,session,fs,note
+sp2_normal.00.sc16,sp2_normal.01.sc16,normal,near,SP1,20e6,B210 2ch / 2442 MHz / gain 64 dB / antenna spacing 3 cm / RC in front
+sp2_hijack.00.sc16,sp2_hijack.01.sc16,hijack,inject,SP1,20e6,RC in front + injector at side
+sp2_jam.00.sc16,sp2_jam.01.sc16,jamming,barrage_lo,SP1,20e6,RC in front + barrage jammer at side
+spB_normal.00.sc16,spB_normal.01.sc16,normal,near,SP2,20e6,distance and angle changed
+spB_hijack.00.sc16,spB_hijack.01.sc16,hijack,inject,SP2,20e6,
+spB_jam.00.sc16,spB_jam.01.sc16,jamming,barrage_lo,SP2,20e6,
+spC_normal.00.sc16,spC_normal.01.sc16,normal,near,SP3,20e6,distance and angle changed
+spC_hijack.00.sc16,spC_hijack.01.sc16,hijack,inject,SP3,20e6,
+spC_jam.00.sc16,spC_jam.01.sc16,jamming,barrage_lo,SP3,20e6,

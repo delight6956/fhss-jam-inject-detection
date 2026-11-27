@@ -15,11 +15,19 @@ data/
   b210_S04-S06/     USRP B210, 중심 2442 MHz, 40 Msps, 세션 S04~S06 (논문 7.8절)
     features_S0x_bands.csv               같은 캡처에서 추출한 서브밴드 bw16/bw20/bw40/kci20
     manifest_S0x.csv
+  b210_2ch_SP1-SP3/ USRP B210 2채널, 중심 2442 MHz, 20 Msps, 세션 SP1~SP3 (논문 7.9절, <표 7-9>)
+    features_2ch.csv                     윈도우 특징(시간·RF·개선 시간), 상태당 5초 = 50윈도우, 총 450개
+    bursts_2ch.csv                       버스트별 채널 간 전력비(rho_db)·위상차(dphi_rad)·상관(coh), 보정 전 값
+    cal_S07.json                         위상·전력비 보정값(calibrate_phase.py 출력)
+    features_2ch_sp_enroll2s.csv         공간 특징을 붙인 CSV. 세션별 정상 캡처 앞 2초를 주파수별 기준 등록에 사용(enroll=1)
+    features_2ch_sp_enroll1s.csv         같은 것, 기준 등록 구간 앞 1초
+    manifest_SP.csv                      캡처 파일 목록(SP1=sp2, SP2=spB, SP3=spC)
 code/
   extract_features_v3.py   I/Q → 윈도우 특징 추출 (제4장 정의)
   evaluate_sets.py         특징 집합별 세션 단위 교차검증(LOSO), McNemar
   baselines.py             기존 기법 비교: 에너지 검출, 잡음바닥 임계, STFT+자기상관 (7.10절)
   calibrate_phase.py, build_spatial.py   2채널 위상 보정과 공간 특징 (4.5절, 7.9절)
+  eval_spatial.py          공간 특징 추가 효과의 세션 단위 교차검증. 기준 등록 구간을 평가에서 제외 (<표 7-9>)
   sim_iq.py                검증용 합성 FHSS I/Q 생성
   eval_f1_mcc_ci.py        매크로 F1·MCC와 블록 부트스트랩 95% 신뢰구간
   eval_alarm.py            k-of-n 경보 규칙별 오경보·탐지 지연 (7.4절)
@@ -42,6 +50,8 @@ results/                   논문에 실은 결과 CSV
 | 시간(T1~T5) | n_bursts, dtoa_mean_ms, dtoa_std_ms, dur_median_ms, n_fragments | 윈도우 내 버스트 수, 도착 간격(DTOA) 평균·표준편차, 버스트 지속시간 중앙값, 파편 수 |
 | 개선 시간(T6~T10) | ul_n_bursts, ul_dtoa_mean_ms, ul_dtoa_std_ms, grid_frac, grid_dev_ms | 업링크 버스트 수·DTOA, 20 ms 프레임 격자 정합 비율·편차 |
 | RF(R1~R5) | noise_floor_db, occupancy, env_cv_max, env_cv_p90, cw_dwell_max | 잡음바닥, 채널 점유율, 포락선 변동계수 최대·90퍼센타일, 협대역 지속률 |
+| 공간(S1~S4) | sp_phase_mean, sp_phase_std, sp_rho_med, sp_rho_std | 윈도우 내 버스트별 채널 간 위상차의 원형 평균·원형 표준편차, 전력비 중앙값·표준편차 (2채널 세션만) |
+| 정규화 공간 | sp_phase_dev_n, sp_phase_std_n, sp_rho_dev_n, sp_rho_std_n | 주파수별 정상 기준을 뺀 잔차의 크기와 퍼짐. enroll=1은 기준 등록에 쓴 윈도우 |
 | 기타 | session, file, win_idx, t_start_s, band, band_width_hz, fs, nfft, win_ms, proc_ms 등 | 메타데이터 |
 
 결측값(버스트가 없거나 1개인 윈도우)은 비어 있습니다. 평가 시 대체 규칙은 `evaluate_sets.py`의 `fill()`을 따릅니다.
@@ -54,7 +64,17 @@ python code/evaluate_sets.py --glob "data/hackrf_S01-S03/features_v3_w*.csv" --o
 python code/evaluate_sets.py --glob "data/b210_S04-S06/features_S0*_bands.csv" --out out_A --seeds 4  # <표 7-8>
 python code/eval_f1_mcc_ci.py kci 15 && python code/eval_f1_mcc_ci.py b210 4                     # F1·MCC·CI
 python code/eval_alarm.py                                                                         # 경보 성능
+python code/eval_spatial.py --features data/b210_2ch_SP1-SP3/features_2ch_sp_enroll2s.csv        # <표 7-9>
 ```
+
+<표 7-9>는 세션마다 정상 캡처의 앞 2초(21개 윈도우)를 주파수별 기준 등록에 쓰고 평가에서 뺀 387개 윈도우(정상 87, 재밍 150, 하이재킹 150)로 계산했습니다(시드 30회). 공간 특징 CSV는 다음 명령으로 다시 만들 수 있습니다.
+
+```bash
+python code/build_spatial.py --features data/b210_2ch_SP1-SP3/features_2ch.csv --bursts data/b210_2ch_SP1-SP3/bursts_2ch.csv \
+    --cal data/b210_2ch_SP1-SP3/cal_S07.json --enroll-sec 2 --out data/b210_2ch_SP1-SP3/features_2ch_sp_enroll2s.csv
+```
+
+`evaluate_sets.py`에는 10차원에 공간 특징을 더한 `fused14`·`fused14n` 집합만 있습니다. 개선 시간 특징을 포함한 15차원 기준의 비교(19·23차원)와 클래스별 재현율은 `eval_spatial.py`로 계산합니다. 두 스크립트 모두 기준 등록 구간(enroll=1)을 평가에서 뺍니다.
 
 MLP(은닉 16, ReLU)와 시드 설정이 논문과 같으므로, scikit-learn 버전 차이에 따른 소수점 이하 차이 외에는 같은 값이 나옵니다(검증 환경: scikit-learn 1.9.1).
 
